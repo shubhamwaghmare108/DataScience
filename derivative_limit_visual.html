@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivative Limit Definition</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .formula {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto;
+            background: white;
+            cursor: crosshair;
+        }
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .slider-container {
+            margin: 20px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+        .value-display {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        .explanation {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 30px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Understanding the Derivative Definition</h1>
+        
+        <div class="formula">
+            f'(x) = lim<sub>h→0</sub> [f(x+h) - f(x)] / h
+        </div>
+
+        <canvas id="canvas" width="800" height="500"></canvas>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #2196F3; height: 3px;"></div>
+                <span>Function f(x)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4CAF50; height: 3px;"></div>
+                <span>Secant Line (slope = Δy/Δx)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF5722; height: 3px;"></div>
+                <span>Tangent Line (slope = f'(x))</span>
+            </div>
+        </div>
+
+        <div class="slider-container">
+            <label>
+                Distance h (interval): 
+                <span class="value-display" id="hValue">2.00</span>
+            </label>
+            <input type="range" id="hSlider" min="0.1" max="4" step="0.1" value="2">
+        </div>
+
+        <div class="controls">
+            <button onclick="animateToZero()">Animate h → 0</button>
+            <button onclick="reset()">Reset</button>
+        </div>
+
+        <div class="explanation">
+            <h3>What's Happening:</h3>
+            <p><strong>The Points:</strong></p>
+            <ul>
+                <li><strong style="color: #2196F3;">Point (x, f(x))</strong>: The point where we want to find the derivative</li>
+                <li><strong style="color: #9C27B0;">Point (x+h, f(x+h))</strong>: A nearby point at distance h away</li>
+            </ul>
+            <p><strong>The Lines:</strong></p>
+            <ul>
+                <li><strong style="color: #4CAF50;">Green Secant Line</strong>: Connects the two points. Its slope is the <em>average rate of change</em> = [f(x+h) - f(x)] / h</li>
+                <li><strong style="color: #FF5722;">Red Tangent Line</strong>: As h → 0, the secant line approaches the tangent line. The tangent's slope is the <em>instantaneous rate of change</em> = f'(x)</li>
+            </ul>
+            <p><strong>Key Insight:</strong> The derivative is the limit of the slope of secant lines as the distance h shrinks to zero!</p>
+        </div>
+
+        <div class="explanation" style="background: #e8f5e9; border-left-color: #4CAF50;">
+            <h3>Current Calculation:</h3>
+            <p id="calculation"></p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const hSlider = document.getElementById('hSlider');
+        const hValue = document.getElementById('hValue');
+        
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const scale = 40;
+        
+        let h = 2;
+        let x = 2;
+        let animating = false;
+        
+        function f(x) {
+            return 0.1 * x * x * x - 0.3 * x * x + x + 1;
+        }
+        
+        function derivative(x) {
+            return 0.3 * x * x - 0.6 * x + 1;
+        }
+        
+        function toCanvasX(x) {
+            return centerX + x * scale;
+        }
+        
+        function toCanvasY(y) {
+            return centerY - y * scale;
+        }
+        
+        function drawAxes() {
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 1;
+            
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#999';
+            ctx.font = '12px Arial';
+            ctx.fillText('x', width - 20, centerY + 20);
+            ctx.fillText('y', centerX + 10, 20);
+        }
+        
+        function drawFunction() {
+            ctx.strokeStyle = '#2196F3';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            for (let px = 0; px < width; px++) {
+                const x = (px - centerX) / scale;
+                const y = f(x);
+                const py = toCanvasY(y);
+                
+                if (px === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+        }
+        
+        function drawSecantLine() {
+            const fx = f(x);
+            const fxh = f(x + h);
+            const slope = (fxh - fx) / h;
+            
+            ctx.strokeStyle = '#4CAF50';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            
+            const x1 = -10;
+            const y1 = fx + slope * (x1 - x);
+            const x2 = 10;
+            const y2 = fx + slope * (x2 - x);
+            
+            ctx.moveTo(toCanvasX(x1), toCanvasY(y1));
+            ctx.lineTo(toCanvasX(x2), toCanvasY(y2));
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            return slope;
+        }
+        
+        function drawTangentLine() {
+            const fx = f(x);
+            const slope = derivative(x);
+            
+            ctx.strokeStyle = '#FF5722';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            const x1 = -10;
+            const y1 = fx + slope * (x1 - x);
+            const x2 = 10;
+            const y2 = fx + slope * (x2 - x);
+            
+            ctx.moveTo(toCanvasX(x1), toCanvasY(y1));
+            ctx.lineTo(toCanvasX(x2), toCanvasY(y2));
+            ctx.stroke();
+        }
+        
+        function drawPoints() {
+            const fx = f(x);
+            const fxh = f(x + h);
+            
+            ctx.fillStyle = '#2196F3';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(x), toCanvasY(fx), 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#000';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('(x, f(x))', toCanvasX(x) + 10, toCanvasY(fx) - 10);
+            
+            ctx.fillStyle = '#9C27B0';
+            ctx.beginPath();
+            ctx.arc(toCanvasX(x + h), toCanvasY(fxh), 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#000';
+            ctx.fillText('(x+h, f(x+h))', toCanvasX(x + h) + 10, toCanvasY(fxh) + 20);
+            
+            ctx.strokeStyle = '#FF9800';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([3, 3]);
+            
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(x + h), toCanvasY(fxh));
+            ctx.lineTo(toCanvasX(x + h), toCanvasY(fx));
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(toCanvasX(x), toCanvasY(fx));
+            ctx.lineTo(toCanvasX(x + h), toCanvasY(fx));
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+            
+            const midY = (fx + fxh) / 2;
+            ctx.fillStyle = '#FF9800';
+            ctx.fillText('Δy', toCanvasX(x + h) + 10, toCanvasY(midY));
+            
+            const midX = x + h / 2;
+            ctx.fillText('h (Δx)', toCanvasX(midX) - 20, toCanvasY(fx) + 20);
+        }
+        
+        function updateCalculation() {
+            const fx = f(x);
+            const fxh = f(x + h);
+            const secantSlope = (fxh - fx) / h;
+            const tangentSlope = derivative(x);
+            
+            const calc = document.getElementById('calculation');
+            calc.innerHTML = `
+                <strong>At x = ${x.toFixed(2)}:</strong><br>
+                f(x) = ${fx.toFixed(3)}<br>
+                f(x+h) = f(${(x+h).toFixed(2)}) = ${fxh.toFixed(3)}<br><br>
+                <strong>Secant Slope (average rate):</strong> [f(x+h) - f(x)] / h = ${secantSlope.toFixed(3)}<br>
+                <strong>Tangent Slope (derivative):</strong> f'(x) = ${tangentSlope.toFixed(3)}<br><br>
+                <strong>Difference:</strong> ${Math.abs(secantSlope - tangentSlope).toFixed(3)}
+                ${h < 0.5 ? '<br><span style="color: #4CAF50;">✓ As h gets smaller, secant slope → tangent slope!</span>' : ''}
+            `;
+        }
+        
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            drawAxes();
+            drawFunction();
+            
+            if (h < 0.5) {
+                drawTangentLine();
+            }
+            
+            drawSecantLine();
+            drawPoints();
+            updateCalculation();
+        }
+        
+        hSlider.addEventListener('input', (e) => {
+            h = parseFloat(e.target.value);
+            hValue.textContent = h.toFixed(2);
+            draw();
+        });
+        
+        function animateToZero() {
+            if (animating) return;
+            animating = true;
+            
+            const startH = h;
+            const duration = 3000;
+            const startTime = Date.now();
+            
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                h = startH * (1 - progress) + 0.1 * progress;
+                hSlider.value = h;
+                hValue.textContent = h.toFixed(2);
+                draw();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    animating = false;
+                }
+            }
+            
+            animate();
+        }
+        
+        function reset() {
+            h = 2;
+            hSlider.value = 2;
+            hValue.textContent = '2.00';
+            draw();
+        }
+        
+        draw();
+    </script>
+</body>
+</html>
