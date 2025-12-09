@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing & Confidence Intervals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .pdf-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .text-block {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .example-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .example-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .formula {
+            background: #fff9e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+        
+        .table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .step-list {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        .step {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #667eea;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-item {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 4px;
+        }
+        
+        .comparison-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .error-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .error-table th, .error-table td {
+            border: 2px solid #667eea;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .error-table th {
+            background: #667eea;
+            color: white;
+        }
+        
+        .type1 {
+            background: #ffe6e6;
+        }
+        
+        .type2 {
+            background: #e6f3ff;
+        }
+        
+        .correct {
+            background: #e6ffe6;
+        }
+        
+        .footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+        }
+        
+        .print-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        
+        .print-btn:hover {
+            background: #764ba2;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .pdf-container {
+                box-shadow: none;
+                margin: 0;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="pdf-container">
+        <div class="header">
+            <h1>Hypothesis Testing & Confidence Intervals</h1>
+            <p>A Comprehensive Guide with Examples</p>
+        </div>
+        
+        <div class="content">
+            <!-- Section 1: Confidence Intervals -->
+            <div class="section">
+                <h2>1. Confidence Intervals</h2>
+                
+                <h3>Definition</h3>
+                <div class="text-block">
+                    A confidence interval (CI) is a range of values calculated from sample data that is believed to contain an unknown population parameter with a specified level of confidence. It provides both a point estimate and a measure of uncertainty around that estimate.
+                </div>
+                
+                <h3>Mathematical Formula</h3>
+                <div class="formula">
+                    CI = Point Estimate ± (Critical Value × Standard Error)
+                    <br><br>
+                    For a mean: CI = x̄ ± (z or t) × (s/√n)
+                    <br>
+                    where: x̄ = sample mean, s = sample standard deviation, n = sample size
+                </div>
+                
+                <h3>Correct Interpretation</h3>
+                <div class="text-block">
+                    <strong>What it means:</strong> A 95% confidence interval means that if you repeated the sampling procedure 100 times and calculated a CI each time, approximately 95 of those intervals would contain the true population parameter.
+                    <br><br>
+                    <strong>What it does NOT mean:</strong> There is NOT a 95% probability that the parameter lies in this specific interval. The parameter either is or isn't in any given interval—it's fixed, not random.
+                </div>
+                
+                <h3>Common Confidence Levels</h3>
+                <table class="table">
+                    <tr>
+                        <th>Confidence Level</th>
+                        <th>Alpha (α)</th>
+                        <th>Z-value (for normal distribution)</th>
+                    </tr>
+                    <tr>
+                        <td>90%</td>
+                        <td>0.10</td>
+                        <td>1.645</td>
+                    </tr>
+                    <tr>
+                        <td>95%</td>
+                        <td>0.05</td>
+                        <td>1.96</td>
+                    </tr>
+                    <tr>
+                        <td>99%</td>
+                        <td>0.01</td>
+                        <td>2.576</td>
+                    </tr>
+                </table>
+                
+                <div class="example-box">
+                    <h4>Example 1: Confidence Interval for Average Height</h4>
+                    <p><strong>Scenario:</strong> You survey 100 college students and find their average height is 172 cm with a standard deviation of 8 cm.</p>
+                    <p><strong>Calculation (95% CI):</strong></p>
+                    <p>Standard Error = 8/√100 = 0.8 cm</p>
+                    <p>CI = 172 ± (1.96 × 0.8) = 172 ± 1.57</p>
+                    <p><strong>Result:</strong> 95% CI = [170.43, 173.57] cm</p>
+                    <p><strong>Interpretation:</strong> We can be 95% confident that the average height of all college students lies between 170.43 and 173.57 cm. This doesn't mean there's a 95% chance the true mean is in this interval—the true mean is fixed. Rather, our method would produce intervals containing the true mean 95% of the time if repeated.</p>
+                </div>
+            </div>
+            
+            <!-- Section 2: Steps in Hypothesis Testing -->
+            <div class="section">
+                <h2>2. Steps in Hypothesis Testing</h2>
+                
+                <div class="text-block">
+                    Hypothesis testing is a structured seven-step process used to make statistical decisions based on sample evidence. Here's the systematic approach:
+                </div>
+                
+                <div class="step-list">
+                    <div class="step" data-step="1">
+                        <strong>State the Hypotheses:</strong> Clearly define the null hypothesis (H₀) and alternative hypothesis (H₁). These must be mutually exclusive and exhaustive.
+                    </div>
+                    <div class="step" data-step="2">
+                        <strong>Set the Significance Level (α):</strong> Choose your alpha level, typically 0.05 (5%). This represents your acceptable probability of making a Type I error.
+                    </div>
+                    <div class="step" data-step="3">
+                        <strong>Choose the Appropriate Test:</strong> Select the statistical test based on data type, sample size, and assumptions (t-test, z-test, chi-square, ANOVA, etc.).
+                    </div>
+                    <div class="step" data-step="4">
+                        <strong>Calculate the Test Statistic:</strong> Compute the relevant statistic (t, z, F, χ²) from your sample data using the appropriate formula.
+                    </div>
+                    <div class="step" data-step="5">
+                        <strong>Determine the P-value:</strong> Find the probability of observing your test statistic (or more extreme) if H₀ is true. This is called the p-value.
+                    </div>
+                    <div class="step" data-step="6">
+                        <strong>Make a Decision:</strong> Compare p-value to α. If p < α, reject H₀. If p ≥ α, fail to reject H₀.
+                    </div>
+                    <div class="step" data-step="7">
+                        <strong>Interpret Results:</strong> Explain what your decision means in the context of your research question. Avoid causal language unless it's a controlled experiment.
+                    </div>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 2: Complete Hypothesis Test</h4>
+                    <p><strong>Research Question:</strong> Does a new study method increase student exam scores? The population mean score is 75.</p>
+                    <p><strong>Step 1 - Hypotheses:</strong></p>
+                    <p>H₀: μ = 75 (new method has no effect)</p>
+                    <p>H₁: μ > 75 (new method increases scores) — one-tailed test</p>
+                    
+                    <p><strong>Step 2 - Significance Level:</strong> α = 0.05</p>
+                    
+                    <p><strong>Step 3 - Test Choice:</strong> One-sample t-test (small sample, unknown population SD)</p>
+                    
+                    <p><strong>Step 4 - Sample Data:</strong> n = 25 students, x̄ = 78.5, s = 6.2</p>
+                    <div class="formula">
+                        t = (x̄ - μ₀) / (s/√n) = (78.5 - 75) / (6.2/√25) = 3.5 / 1.24 = 2.82
+                    </div>
+                    
+                    <p><strong>Step 5 - P-value:</strong> For t = 2.82 with df = 24, p-value ≈ 0.0053 (one-tailed)</p>
+                    
+                    <p><strong>Step 6 - Decision:</strong> Since p (0.0053) < α (0.05), we REJECT H₀</p>
+                    
+                    <p><strong>Step 7 - Interpretation:</strong> We have statistically significant evidence that the new study method increases exam scores beyond the population mean of 75. The probability of observing scores this high if the method had no effect is only 0.53%.</p>
+                </div>
+            </div>
+            
+            <!-- Section 3: H0 vs H1 -->
+            <div class="section">
+                <h2>3. Null Hypothesis (H₀) vs Alternative Hypothesis (H₁)</h2>
+                
+                <div class="comparison-box">
+                    <div class="comparison-item">
+                        <h4>Null Hypothesis (H₀)</h4>
+                        <p><strong>Definition:</strong> A statement of no effect, no difference, or no relationship between variables.</p>
+                        <p><strong>Role:</strong> The default assumption being tested. You need evidence to reject it.</p>
+                        <p><strong>Examples:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>H₀: μ = 100</li>
+                            <li>H₀: p₁ = p₂ (no difference between groups)</li>
+                            <li>H₀: r = 0 (no correlation)</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item">
+                        <h4>Alternative Hypothesis (H₁)</h4>
+                        <p><strong>Definition:</strong> A statement that contradicts H₀. It represents what you're trying to find evidence for.</p>
+                        <p><strong>Role:</strong> Accepted only if sufficient evidence against H₀ exists.</p>
+                        <p><strong>Examples:</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>H₁: μ ≠ 100 (two-tailed)</li>
+                            <li>H₁: μ > 100 (one-tailed)</li>
+                            <li>H₁: p₁ ≠ p₂ (two-tailed)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>One-Tailed vs Two-Tailed Tests</h3>
+                <table class="table">
+                    <tr>
+                        <th>Aspect</th>
+                        <th>One-Tailed Test</th>
+                        <th>Two-Tailed Test</th>
+                    </tr>
+                    <tr>
+                        <td>Direction</td>
+                        <td>H₁ specifies direction (> or <)</td>
+                        <td>H₁ specifies no direction (≠)</td>
+                    </tr>
+                    <tr>
+                        <td>Critical Region</td>
+                        <td>All α in one tail</td>
+                        <td>α split between two tails (α/2 each)</td>
+                    </tr>
+                    <tr>
+                        <td>Power</td>
+                        <td>Higher (more power to detect effect in specified direction)</td>
+                        <td>Lower (power split between two directions)</td>
+                    </tr>
+                    <tr>
+                        <td>When to Use</td>
+                        <td>When theory or prior research suggests direction</td>
+                        <td>When exploring general differences</td>
+                    </tr>
+                </table>
+                
+                <div class="example-box">
+                    <h4>Example 3: Formulating Hypotheses</h4>
+                    <p><strong>Scenario 1 (Two-tailed):</strong> Does a new medication affect blood pressure?</p>
+                    <p>H₀: μ_new = μ_old (medication has no effect)</p>
+                    <p>H₁: μ_new ≠ μ_old (medication affects blood pressure)</p>
+                    <p style="margin-top: 10px;"><em>Use when: You don't know if medication will increase or decrease BP</em></p>
+                    
+                    <p style="margin-top: 15px;"><strong>Scenario 2 (One-tailed):</strong> Does coffee increase alertness?</p>
+                    <p>H₀: μ_with = μ_without (coffee has no effect)</p>
+                    <p>H₁: μ_with > μ_without (coffee increases alertness)</p>
+                    <p style="margin-top: 10px;"><em>Use when: Theory suggests coffee only increases (not decreases) alertness</em></p>
+                </div>
+            </div>
+            
+            <!-- Section 4: Errors in Hypothesis Testing -->
+            <div class="section">
+                <h2>4. Errors in Hypothesis Testing</h2>
+                
+                <div class="text-block">
+                    When making decisions in hypothesis testing, there's always a chance of error. Two types of errors can occur, representing a fundamental trade-off in statistical inference.
+                </div>
+                
+                <h3>The Error Matrix</h3>
+                <table class="error-table">
+                    <tr>
+                        <th></th>
+                        <th>H₀ is True</th>
+                        <th>H₀ is False (H₁ True)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Reject H₀</strong></td>
+                        <td class="type1"><strong>Type I Error (α)</strong><br>False Positive<br>P(Type I) = α</td>
+                        <td class="correct"><strong>Correct Decision</strong><br>True Positive<br>P(correct) = 1 - β (Power)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fail to Reject H₀</strong></td>
+                        <td class="correct"><strong>Correct Decision</strong><br>True Negative<br>P(correct) = 1 - α</td>
+                        <td class="type2"><strong>Type II Error (β)</strong><br>False Negative<br>P(Type II) = β</td>
+                    </tr>
+                </table>
+                
+                <h3>Type I Error (False Positive)</h3>
+                <div class="text-block">
+                    <strong>Definition:</strong> Rejecting H₀ when it is actually true. You conclude there's an effect when there actually isn't one.
+                    <br><br>
+                    <strong>Probability:</strong> P(Type I) = α (your significance level)
+                    <br><br>
+                    <strong>Consequence:</strong> Making a false claim about a finding
+                    <br><br>
+                    <strong>Example:</strong> Concluding a drug is effective when it actually has no effect
+                </div>
+                
+                <h3>Type II Error (False Negative)</h3>
+                <div class="text-block">
+                    <strong>Definition:</strong> Failing to reject H₀ when it is actually false. You conclude there's no effect when one truly exists.
+                    <br><br>
+                    <strong>Probability:</strong> P(Type II) = β
+                    <br><br>
+                    <strong>Power:</strong> P(correctly rejecting false H₀) = 1 - β
+                    <br><br>
+                    <strong>Consequence:</strong> Missing a real effect or relationship
+                    <br><br>
+                    <strong>Example:</strong> Concluding a drug is ineffective when it actually works
+                </div>
+                
+                <h3>The Trade-off</h3>
+                <div class="text-block">
+                    Type I and Type II errors have an inverse relationship. Decreasing the probability of one typically increases the probability of the other. For example, lowering α from 0.05 to 0.01 reduces the chance of Type I error but increases the chance of Type II error (lower power).
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 4: Understanding Error Types</h4>
+                    <p><strong>Scenario:</strong> Testing if a student is guilty (H₀: innocent vs H₁: guilty)</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Type I Error (False Positive):</strong></p>
+                    <p>Convicting an innocent person (concluding guilty when actually innocent)</p>
+                    <p>Consequence: Serious injustice—innocent person punished</p>
+                    <p>Legal system minimizes this by requiring "beyond reasonable doubt"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Type II Error (False Negative):</strong></p>
+                    <p>Acquitting a guilty person (concluding innocent when actually guilty)</p>
+                    <p>Consequence: Guilty person escapes justice</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Why the preference?</strong> Legal systems generally consider Type I error more serious, hence the high burden of proof (low α). But in medical testing for serious diseases, you might prefer low β because missing a disease (Type II) could be fatal.</p>
+                </div>
+                
+                <div class="example-box">
+                    <h4>Example 5: Medical Testing Error</h4>
+                    <p><strong>H₀:</strong> Patient does not have disease</p>
+                    <p><strong>H₁:</strong> Patient has disease</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Type I Error:</strong> Test says patient has disease, but they don't</p>
+                    <p>Consequence: Unnecessary treatment, anxiety, medical costs</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Type II Error:</strong> Test says patient doesn't have disease, but they do</p>
+                    <p>Consequence: Disease goes untreated, patient's health deteriorates</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Decision:</strong> For serious diseases, we often accept higher Type I error risk to minimize Type II error (maximize power). Better to treat some false positives than miss real cases.</p>
+                </div>
+                
+                <h3>Factors Affecting Error Rates</h3>
+                <table class="table">
+                    <tr>
+                        <th>Factor</th>
+                        <th>Effect on Type I Error</th>
+                        <th>Effect on Type II Error</th>
+                    </tr>
+                    <tr>
+                        <td>Increase α (e.g., 0.05 → 0.10)</td>
+                        <td>Increases</td>
+                        <td>Decreases</td>
+                    </tr>
+                    <tr>
+                        <td>Increase sample size (n)</td>
+                        <td>Can stay same (if controlled)</td>
+                        <td>Decreases</td>
+                    </tr>
+                    <tr>
+                        <td>Increase effect size</td>
+                        <td>No direct effect</td>
+                        <td>Decreases</td>
+                    </tr>
+                    <tr>
+                        <td>One-tailed vs Two-tailed</td>
+                        <td>Lower for one-tailed (same α total)</td>
+                        <td>Lower for one-tailed (better power)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2>Summary Table</h2>
+                <table class="table">
+                    <tr>
+                        <th>Concept</th>
+                        <th>Key Points</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Confidence Interval</strong></td>
+                        <td>Range containing population parameter with specified confidence; interpretation about method, not this specific interval</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hypothesis Testing Steps</strong></td>
+                        <td>State hypotheses → Set α → Choose test → Calculate statistic → Find p-value → Make decision → Interpret</td>
+                    </tr>
+                    <tr>
+                        <td><strong>H₀ vs H₁</strong></td>
+                        <td>H₀ = no effect (default); H₁ = effect exists (what we test for); must be mutually exclusive</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type I Error (α)</strong></td>
+                        <td>False positive; rejecting true H₀; probability = α (controlled by researcher)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Type II Error (β)</strong></td>
+                        <td>False negative; failing to reject false H₀; inverse relationship with Type I</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Statistical Power</strong></td>
+                        <td>1 - β; probability of correctly detecting effect when it exists; increased by larger n, stronger effect, lower α</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <button class="print-btn" onclick="window.print()">📄 Print as PDF</button>
+        
+        <div class="footer">
+            <p>Statistical Inference Guide | Hypothesis Testing & Confidence Intervals</p>
+            <p>For educational purposes</p>
+        </div>
+    </div>
+</body>
+</html>
