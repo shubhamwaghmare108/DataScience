@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probability Tutorial</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .button-group {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        #pdf-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            page-break-before: always;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+
+        h3 {
+            color: #16a085;
+            margin-top: 15px;
+        }
+
+        .box {
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 5px solid;
+            background: #f9f9f9;
+        }
+
+        .formula-box {
+            border-color: #3498db;
+            background: #ecf0f1;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .example-box {
+            border-color: #27ae60;
+            background: #e8f8f5;
+        }
+
+        .note-box {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .page-break {
+            page-break-after: always;
+            margin-bottom: 50px;
+            padding-bottom: 50px;
+        }
+
+        @media print {
+            .button-group {
+                display: none;
+            }
+            #pdf-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="button-group">
+        <button onclick="downloadPDF()">📥 Download PDF</button>
+        <button onclick="window.print()">🖨️ Print</button>
+    </div>
+
+    <div id="pdf-content">
+
+        <h1 style="text-align: center; border: none; margin-top: 100px;">PROBABILITY</h1>
+        <p style="text-align: center; font-size: 18px;">Complete Tutorial & Guide</p>
+        <p style="text-align: center; margin-top: 80px; color: #666;">Master probability theory, concepts, and applications</p>
+
+        <div class="page-break"></div>
+
+        <h1>1. FUNDAMENTALS OF PROBABILITY</h1>
+
+        <h2>What is Probability?</h2>
+        <p>Probability measures the likelihood that an event will occur. It ranges from 0 (impossible) to 1 (certain).</p>
+
+        <h2>Basic Definitions</h2>
+
+        <h3>Sample Space (S)</h3>
+        <p>Set of all possible outcomes.</p>
+        <div class="box example-box">
+            <strong>Example:</strong> Coin flip → S = {Heads, Tails}
+        </div>
+
+        <h3>Event (E)</h3>
+        <p>A specific outcome or group of outcomes.</p>
+
+        <h3>Probability Formula</h3>
+        <div class="box formula-box">
+        P(E) = Number of Favorable Outcomes / Total Number of Possible Outcomes
+        </div>
+
+        <h2>Probability Range</h2>
+        <div class="box formula-box">
+        0 ≤ P(E) ≤ 1
+        <br/>P(E) = 0  → Impossible
+        <br/>P(E) = 0.5 → Equally likely
+        <br/>P(E) = 1  → Certain
+        </div>
+
+        <h2>Types of Probability</h2>
+        <ul>
+            <li><strong>Classical:</strong> Equally likely outcomes (dice, coins)</li>
+            <li><strong>Empirical:</strong> Based on observed frequency</li>
+            <li><strong>Subjective:</strong> Based on personal judgment</li>
+        </ul>
+
+        <h2>Basic Examples</h2>
+        <div class="box example-box">
+            <strong>Example 1:</strong> P(Heads) = 1/2 = 0.5 = 50%
+        </div>
+
+        <div class="box example-box">
+            <strong>Example 2:</strong> P(Rolling 3 on die) = 1/6 ≈ 16.7%
+        </div>
+
+        <div class="box example-box">
+            <strong>Example 3:</strong> P(Drawing Ace from deck) = 4/52 ≈ 7.7%
+        </div>
+
+        <div class="page-break"></div>
+
+        <h1>2. BASIC PROBABILITY RULES</h1>
+
+        <h2>Complement Rule</h2>
+        <div class="box formula-box">
+        P(E') = 1 - P(E)
+        </div>
+        <p>Probability of event NOT occurring.</p>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(Not getting 6) = 1 - 1/6 = 5/6
+        </div>
+
+        <h2>Addition Rule</h2>
+
+        <h3>Mutually Exclusive Events (no overlap)</h3>
+        <div class="box formula-box">
+        P(A or B) = P(A) + P(B)
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(Rolling 1 or 2) = 1/6 + 1/6 = 1/3
+        </div>
+
+        <h3>Non-Mutually Exclusive Events (with overlap)</h3>
+        <div class="box formula-box">
+        P(A or B) = P(A) + P(B) - P(A and B)
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(Card is Red or Ace)<br/>
+            = 26/52 + 4/52 - 2/52 = 28/52 = 7/13
+        </div>
+
+        <h2>Multiplication Rule</h2>
+
+        <h3>Independent Events</h3>
+        <div class="box formula-box">
+        P(A and B) = P(A) × P(B)
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(Heads AND 6 on die)<br/>
+            = 1/2 × 1/6 = 1/12
+        </div>
+
+        <h3>Dependent Events</h3>
+        <div class="box formula-box">
+        P(A and B) = P(A) × P(B|A)
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(Two Aces without replacement)<br/>
+            = 4/52 × 3/51 ≈ 0.0045
+        </div>
+
+        <div class="page-break"></div>
+
+        <h1>3. CONDITIONAL PROBABILITY</h1>
+
+        <h2>Definition</h2>
+        <div class="box formula-box">
+        P(B|A) = P(A and B) / P(A)
+        <br/><br/>Read as: "Probability of B given A"
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> P(King | Face Card) = 4/12 = 1/3
+        </div>
+
+        <h2>Bayes' Theorem</h2>
+        <div class="box formula-box">
+        P(A|B) = P(B|A) × P(A) / P(B)
+        </div>
+
+        <h2>Medical Test Example</h2>
+        <div class="box example-box">
+            <strong>Scenario:</strong><br/>
+            • Disease is rare: P(Disease) = 0.01<br/>
+            • Test accuracy: P(Positive|Disease) = 0.99<br/>
+            • False positive rate: P(Positive|No Disease) = 0.05<br/><br/>
+            <strong>Question:</strong> If you test positive, what's probability you have disease?<br/><br/>
+            <strong>Answer:</strong> P(Disease|Positive) ≈ 16.7%<br/>
+            (Much lower than 99% because disease is rare!)
+        </div>
+
+        <div class="page-break"></div>
+
+        <h1>4. PROBABILITY DISTRIBUTIONS</h1>
+
+        <h2>Binomial Distribution</h2>
+        <p>Number of successes in fixed number of independent trials.</p>
+        <div class="box formula-box">
+        P(X = k) = C(n,k) × p^k × (1-p)^(n-k)
+        <br/><br/>n = trials, k = successes, p = success probability
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> Flip coin 10 times, probability of exactly 7 heads<br/>
+            P(X=7) ≈ 11.7%
+        </div>
+
+        <h2>Poisson Distribution</h2>
+        <p>Number of events in fixed time or space interval.</p>
+        <div class="box formula-box">
+        P(X = k) = (e^(-λ) × λ^k) / k!
+        <br/><br/>λ = average number of events
+        </div>
+
+        <h2>Normal Distribution</h2>
+        <p>Bell-shaped, symmetric distribution. Most common in nature.</p>
+        <ul>
+            <li>68% within 1 SD of mean</li>
+            <li>95% within 2 SDs of mean</li>
+            <li>99.7% within 3 SDs of mean</li>
+        </ul>
+
+        <div class="box example-box">
+            <strong>Example:</strong> Heights: μ=170cm, σ=10cm<br/>
+            P(160 < Height < 180) = 68%
+        </div>
+
+        <h2>Distribution Comparison</h2>
+        <table>
+            <tr>
+                <th>Distribution</th>
+                <th>Type</th>
+                <th>Use Case</th>
+            </tr>
+            <tr>
+                <td>Binomial</td>
+                <td>Discrete</td>
+                <td>Fixed trials, 2 outcomes</td>
+            </tr>
+            <tr>
+                <td>Poisson</td>
+                <td>Discrete</td>
+                <td>Events in interval</td>
+            </tr>
+            <tr>
+                <td>Normal</td>
+                <td>Continuous</td>
+                <td>Natural phenomena</td>
+            </tr>
+            <tr>
+                <td>Uniform</td>
+                <td>Continuous</td>
+                <td>Equal likelihood</td>
+            </tr>
+            <tr>
+                <td>Exponential</td>
+                <td>Continuous</td>
+                <td>Time to event</td>
+            </tr>
+        </table>
+
+        <div class="page-break"></div>
+
+        <h1>5. COMBINATORICS (COUNTING)</h1>
+
+        <h2>Fundamental Counting Principle</h2>
+        <div class="box formula-box">
+        Total ways = n₁ × n₂ × ... × nₖ
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> Shirt (5 options) × Pants (3 options) = 15 outfits
+        </div>
+
+        <h2>Permutations (Order Matters)</h2>
+        <div class="box formula-box">
+        P(n,r) = n! / (n-r)!
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> Arrange 3 people in 5 positions<br/>
+            P(5,3) = 5! / 2! = 60 ways
+        </div>
+
+        <h2>Combinations (Order Doesn't Matter)</h2>
+        <div class="box formula-box">
+        C(n,r) = n! / [r! × (n-r)!]
+        </div>
+
+        <div class="box example-box">
+            <strong>Example:</strong> Choose 3 people from 5<br/>
+            C(5,3) = 5! / (3! × 2!) = 10 ways
+        </div>
+
+        <h2>Key Difference</h2>
+        <table>
+            <tr>
+                <th>Permutation</th>
+                <th>Combination</th>
+            </tr>
+            <tr>
+                <td>Order matters</td>
+                <td>Order doesn't matter</td>
+            </tr>
+            <tr>
+                <td>(A,B) ≠ (B,A)</td>
+                <td>{A,B} = {B,A}</td>
+            </tr>
+            <tr>
+                <td>Arrangements, sequences</td>
+                <td>Selections, committees</td>
+            </tr>
+        </table>
+
+        <div class="page-break"></div>
+
+        <h1>6. EXPECTED VALUE & VARIANCE</h1>
+
+        <h2>Expected Value (Mean)</h2>
+        <p>Average outcome you expect over many trials.</p>
+        <div class="box formula-box">
+        E(X) = Σ [x × P(x)]
+        </div>
+
+        <div class="box example-box">
+            <strong>Fair Die:</strong><br/>
+            E(X) = (1+2+3+4+5+6)/6 = 3.5
+        </div>
+
+        <div class="box example-box">
+            <strong>Coin Bet:</strong> Win $10 on Heads, Lose $5 on Tails<br/>
+            E(X) = 10×0.5 + (-5)×0.5 = $2.50
+        </div>
+
+        <h2>Variance & Standard Deviation</h2>
+        <p>Measure of spread and risk in outcomes.</p>
+        <div class="box formula-box">
+        Var(X) = E(X²) - [E(X)]²
+        <br/>σ = √Var(X)
+        </div>
+
+        <div class="box example-box">
+            <strong>Investment Comparison:</strong><br/>
+            Investment A: E=$100, SD=$5 (stable)<br/>
+            Investment B: E=$100, SD=$50 (risky)<br/>
+            Same expected return, B is much riskier!
+        </div>
+
+        <div class="page-break"></div>
+
+        <h1>7. REAL-WORLD APPLICATIONS</h1>
+
+        <h2>Gambling</h2>
+        <div class="box example-box">
+            <strong>Roulette:</strong> P(Win) = 1/37<br/>
+            House edge = 2.7%
+        </div>
+
+        <h2>Insurance</h2>
+        <div class="box example-box">
+            <strong>Life Insurance:</strong><br/>
+            Death probability (age 30) = 0.001<br/>
+            Payout = $500,000<br/>
+            Expected cost = 0.001 × $500,000 = $500
+        </div>
+
+        <h2>Quality Control</h2>
+        <div class="box example-box">
+            <strong>Manufacturing:</strong><br/>
+            P(Defect) = 0.02 per item<br/>
+            Batch = 100 items<br/>
+            Expected defects = 100 × 0.02 = 2 items
+        </div>
+
+        <h2>Sports Analytics</h2>
+        <div class="box example-box">
+            <strong>Batting Average:</strong><br/>
+            300 hits in 1000 at-bats = 30% probability<br/>
+            Expected hits in 500 at-bats = 150
+        </div>
+
+        <div class="page-break"></div>
+
+        <h1>8. QUICK REFERENCE - ESSENTIAL FORMULAS</h1>
+
+        <table>
+            <tr>
+                <th>Concept</th>
+                <th>Formula</th>
+            </tr>
+            <tr>
+                <td>Basic Probability</td>
+                <td>P(E) = Favorable / Total</td>
+            </tr>
+            <tr>
+                <td>Complement</td>
+                <td>P(E') = 1 - P(E)</td>
+            </tr>
+            <tr>
+                <td>Addition</td>
+                <td>P(A or B) = P(A) + P(B) - P(A,B)</td>
+            </tr>
+            <tr>
+                <td>Multiplication</td>
+                <td>P(A,B) = P(A) × P(B|A)</td>
+            </tr>
+            <tr>
+                <td>Conditional</td>
+                <td>P(B|A) = P(A,B) / P(A)</td>
+            </tr>
+            <tr>
+                <td>Bayes</td>
+                <td>P(A|B) = P(B|A)×P(A)/P(B)</td>
+            </tr>
+            <tr>
+                <td>Permutations</td>
+                <td>P(n,r) = n! / (n-r)!</td>
+            </tr>
+            <tr>
+                <td>Combinations</td>
+                <td>C(n,r) = n! / [r!(n-r)!]</td>
+            </tr>
+            <tr>
+                <td>Expected Value</td>
+                <td>E(X) = Σ [x × P(x)]</td>
+            </tr>
+            <tr>
+                <td>Binomial</td>
+                <td>P(X=k) = C(n,k)×p^k×(1-p)^(n-k)</td>
+            </tr>
+        </table>
+
+        <h2>Key Concepts</h2>
+        <ul>
+            <li><strong>Independence:</strong> Events where outcome of one doesn't affect the other</li>
+            <li><strong>Mutually Exclusive:</strong> Events that cannot both occur</li>
+            <li><strong>Exhaustive:</strong> Events together cover all possibilities</li>
+            <li><strong>Law of Large Numbers:</strong> As trials increase, experimental probability approaches theoretical probability</li>
+        </ul>
+
+        <h2>Problem-Solving Tips</h2>
+        <ul>
+            <li>Check if events are independent or dependent</li>
+            <li>"Or" suggests addition, "and" suggests multiplication</li>
+            <li>Use complement when easier to find P(not E)</li>
+            <li>Watch for with/without replacement</li>
+            <li>Use Bayes' Theorem for updating beliefs with new information</li>
+            <li>Verify all probabilities sum to 1</li>
+        </ul>
+
+        <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #bdc3c7; text-align: center; color: #666;">
+            <p><strong>Probability - Complete Tutorial & Guide</strong></p>
+            <p>© 2026</p>
+        </div>
+
+    </div>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin: 10,
+                filename: 'Probability_Tutorial.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).save().from(element);
+        }
+    </script>
+</body>
+</html>

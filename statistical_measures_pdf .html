@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Measures - Complete Guide</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .button-group {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        #pdf-content {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            padding: 30px;
+            margin-bottom: 20px;
+            page-break-after: always;
+            position: relative;
+        }
+
+        .title-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-page h1 {
+            font-size: 48px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .title-page p {
+            font-size: 18px;
+            color: #666;
+            margin: 15px 0;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 20px;
+            margin-top: 0;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            font-size: 20px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        h3 {
+            color: #16a085;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            font-size: 13px;
+        }
+
+        .formula {
+            background: #ecf0f1;
+            padding: 12px;
+            border-left: 4px solid #3498db;
+            margin: 12px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+
+        .example {
+            background: #e8f8f5;
+            padding: 12px;
+            border-left: 4px solid #16a085;
+            margin: 12px 0;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 11px;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #34495e;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+        }
+
+        tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+
+        ul {
+            margin-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .visual-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 10px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .summary-box {
+            background: #fff3cd;
+            padding: 12px;
+            border-left: 4px solid #ffc107;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #bdc3c7;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .toc {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 3px;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .toc ul {
+            margin-left: 20px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .button-group {
+                display: none;
+            }
+            .page {
+                margin-bottom: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="button-group">
+        <button onclick="downloadPDF()">📥 Download PDF</button>
+        <button onclick="window.print()">🖨️ Print</button>
+    </div>
+
+    <div id="pdf-content">
+        <!-- PAGE 1: TITLE -->
+        <div class="page title-page">
+            <h1>STATISTICAL MEASURES</h1>
+            <p style="font-size: 22px; margin-top: 40px;"><strong>Complete Comprehensive Guide</strong></p>
+            <p style="margin-top: 60px;">A detailed reference for understanding and applying statistical measures</p>
+            <p style="margin-top: 80px; font-size: 14px; color: #999;">January 2026</p>
+        </div>
+
+        <!-- PAGE 2: TABLE OF CONTENTS -->
+        <div class="page">
+            <h1>Table of Contents</h1>
+            <div class="toc">
+                <ul>
+                    <li><strong>1. Measures of Central Tendency</strong> - Mean, Median, Mode</li>
+                    <li><strong>2. Measures of Dispersion</strong> - Range, Variance, SD, IQR, CV</li>
+                    <li><strong>3. Measures of Shape</strong> - Skewness, Kurtosis</li>
+                    <li><strong>4. Measures of Position</strong> - Quartiles, Deciles, Percentiles</li>
+                    <li><strong>5. Additional Measures</strong> - Correlation, Effect Size, Reliability</li>
+                    <li><strong>6. Quick Reference Guide</strong> - When to use, Formulas, Examples</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PAGE 3-4: CENTRAL TENDENCY -->
+        <div class="page">
+            <h1>1. Measures of Central Tendency</h1>
+            
+            <h2>1.1 Mean (Average)</h2>
+            <p>The sum of all values divided by the number of values.</p>
+            <div class="formula">Mean = Σx / n</div>
+            
+            <h3>Advantages:</h3>
+            <ul>
+                <li>Uses all data points</li>
+                <li>Easy to calculate and understand</li>
+                <li>Good for normally distributed data</li>
+            </ul>
+
+            <h3>Disadvantages:</h3>
+            <ul>
+                <li>Affected by outliers</li>
+                <li>May not represent skewed data well</li>
+            </ul>
+
+            <div class="example">
+                <strong>Example:</strong> Data: 10, 15, 20, 25, 30 → Mean = 100/5 = 20
+            </div>
+
+            <h2>1.2 Median</h2>
+            <p>The middle value when data is arranged in order.</p>
+
+            <h3>Advantages:</h3>
+            <ul>
+                <li>Not affected by outliers</li>
+                <li>Good for skewed distributions</li>
+                <li>Easy to understand</li>
+            </ul>
+
+            <div class="example">
+                <strong>Example:</strong> Data: 10, 15, 20, 25, 30 → Median = 20
+            </div>
+
+            <h2>1.3 Mode</h2>
+            <p>The value that appears most frequently in the dataset.</p>
+
+            <div class="example">
+                <strong>Example:</strong> Data: 10, 15, 15, 20, 30 → Mode = 15
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Measure</th>
+                        <th>Best Used When</th>
+                        <th>Outlier Affected</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mean</td>
+                        <td>Normally distributed</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Median</td>
+                        <td>Skewed/outliers</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Mode</td>
+                        <td>Categorical data</td>
+                        <td>No</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGE 5: DISPERSION -->
+        <div class="page">
+            <h1>2. Measures of Dispersion</h1>
+
+            <h2>2.1 Range</h2>
+            <p>The difference between maximum and minimum values.</p>
+            <div class="formula">Range = Max - Min</div>
+            <div class="example">Example: 10, 15, 20, 25, 100 → Range = 90</div>
+
+            <h2>2.2 Variance</h2>
+            <p>Average of squared deviations from the mean.</p>
+            <div class="formula">σ² = Σ(x - μ)² / N</div>
+
+            <h2>2.3 Standard Deviation</h2>
+            <p>Square root of variance. Same units as original data.</p>
+            <div class="formula">σ = √Variance</div>
+
+            <h2>2.4 Interquartile Range (IQR)</h2>
+            <p>Difference between 3rd and 1st quartiles.</p>
+            <div class="formula">IQR = Q3 - Q1</div>
+
+            <h2>2.5 Coefficient of Variation (CV)</h2>
+            <p>Standardized measure of dispersion.</p>
+            <div class="formula">CV = (Standard Deviation / Mean) × 100%</div>
+
+            <div class="example">
+                <strong>Example:</strong><br/>
+                Dataset A: Mean=100, SD=10 → CV=10%<br/>
+                Dataset B: Mean=50, SD=10 → CV=20%<br/>
+                (B is more variable)
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Measure</th>
+                        <th>Robustness</th>
+                        <th>Complexity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Range</td>
+                        <td>Poor</td>
+                        <td>Simple</td>
+                    </tr>
+                    <tr>
+                        <td>Std Dev</td>
+                        <td>Poor</td>
+                        <td>Moderate</td>
+                    </tr>
+                    <tr>
+                        <td>IQR</td>
+                        <td>Excellent</td>
+                        <td>Simple</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGE 6: SHAPE -->
+        <div class="page">
+            <h1>3. Measures of Shape</h1>
+
+            <h2>3.1 Skewness</h2>
+            <p>Measures asymmetry of distribution - how much it leans to one side.</p>
+            <div class="formula">Skewness = Σ(x - mean)³ / (n × s³)</div>
+
+            <h3>Interpretation:</h3>
+            <ul>
+                <li><strong>= 0:</strong> Symmetric/balanced</li>
+                <li><strong>> 0:</strong> Right-skewed (mean > median)</li>
+                <li><strong>< 0:</strong> Left-skewed (mean < median)</li>
+                <li><strong>|Skewness| < 0.5:</strong> Fairly symmetric</li>
+                <li><strong>|Skewness| > 1:</strong> Highly skewed</li>
+            </ul>
+
+            <div class="example">
+                <strong>Examples:</strong><br/>
+                • Income (right-skewed): most earn less, few earn very much<br/>
+                • Test scores (left-skewed): most score high, few score low
+            </div>
+
+            <h2>3.2 Kurtosis</h2>
+            <p>Measures "peakedness" - sharpness of peak and heaviness of tails.</p>
+            <div class="formula">Kurtosis = Σ(x - mean)⁴ / (n × s⁴) - 3</div>
+
+            <h3>Interpretation:</h3>
+            <ul>
+                <li><strong>= 0 (Mesokurtic):</strong> Normal distribution</li>
+                <li><strong>> 0 (Leptokurtic):</strong> Sharp peak, heavy tails, more outliers</li>
+                <li><strong>< 0 (Platykurtic):</strong> Flat peak, light tails, fewer outliers</li>
+            </ul>
+
+            <div class="summary-box">
+                <strong>Key Point:</strong> Understanding both skewness and kurtosis together gives a complete picture of distribution shape.
+            </div>
+        </div>
+
+        <!-- PAGE 7: POSITION -->
+        <div class="page">
+            <h1>4. Measures of Position</h1>
+
+            <h2>4.1 Quartiles</h2>
+            <p>Divide data into 4 equal parts (25% each).</p>
+            <ul>
+                <li><strong>Q1:</strong> 25th percentile</li>
+                <li><strong>Q2:</strong> 50th percentile (Median)</li>
+                <li><strong>Q3:</strong> 75th percentile</li>
+            </ul>
+
+            <div class="example">
+                <strong>Example:</strong><br/>
+                Data: 10, 15, 20, 25, 30, 35, 40, 45, 50<br/>
+                Q1=20, Q2=30, Q3=40, IQR=20
+            </div>
+
+            <h2>4.2 Deciles</h2>
+            <p>Divide data into 10 equal parts (10% each).</p>
+            <p>D1 = 10th percentile, D2 = 20th percentile, ..., D9 = 90th percentile</p>
+
+            <h2>4.3 Percentiles</h2>
+            <p>Divide data into 100 equal parts (1% each).</p>
+            <div class="formula">Position = (P / 100) × (n + 1)</div>
+
+            <h3>Common Percentiles:</h3>
+            <ul>
+                <li>P10 = 10th percentile</li>
+                <li>P25 = 25th percentile (Q1)</li>
+                <li>P50 = 50th percentile (Median)</li>
+                <li>P75 = 75th percentile (Q3)</li>
+                <li>P90 = 90th percentile</li>
+            </ul>
+
+            <h2>4.4 Box Plot</h2>
+            <div class="visual-box">Min    Q1  Q2(Median)  Q3    Max
+|      |      |        |      |
+••••|---•---•------•--------•---•--|••••
+    |   Box (50%)   |
+    |<----IQR----->|</div>
+
+            <div class="example">
+                <strong>Real-World Examples:</strong><br/>
+                • Test Scores: 85th percentile = scored higher than 85%<br/>
+                • Income: 9th decile = earn more than 90%<br/>
+                • Height: 75th percentile = 75% shorter than you
+            </div>
+        </div>
+
+        <!-- PAGE 8: ADDITIONAL MEASURES -->
+        <div class="page">
+            <h1>5. Additional Statistical Measures</h1>
+
+            <h2>5.1 Correlation (Pearson r)</h2>
+            <p>Measures relationship between two variables.</p>
+            <div class="formula">r = Σ[(x - x̄)(y - ȳ)] / √[Σ(x - x̄)² × Σ(y - ȳ)²]</div>
+
+            <h3>Range: -1 to +1</h3>
+            <ul>
+                <li>r = +1: Perfect positive correlation</li>
+                <li>r = 0: No correlation</li>
+                <li>r = -1: Perfect negative correlation</li>
+                <li>0.7-1.0: Strong correlation</li>
+                <li>0.3-0.7: Moderate correlation</li>
+            </ul>
+
+            <h2>5.2 Z-Score</h2>
+            <p>How many standard deviations from the mean.</p>
+            <div class="formula">Z = (x - mean) / SD</div>
+
+            <div class="example">
+                <strong>Example:</strong> Mean=70, SD=10, Your score=85<br/>
+                Z = (85-70)/10 = 1.5 (1.5 SDs above average)
+            </div>
+
+            <h2>5.3 Effect Size (Cohen's d)</h2>
+            <p>Standardized difference between two groups.</p>
+            <div class="formula">d = (Mean₁ - Mean₂) / Pooled SD</div>
+
+            <ul>
+                <li>d = 0.2: Small effect</li>
+                <li>d = 0.5: Medium effect</li>
+                <li>d = 0.8: Large effect</li>
+            </ul>
+
+            <h2>5.4 Gini Coefficient</h2>
+            <p>Measures inequality (income, wealth).</p>
+            <ul>
+                <li>0 = Perfect equality</li>
+                <li>1 = Perfect inequality</li>
+                <li>0.35 = Moderate inequality</li>
+                <li>0.60 = High inequality</li>
+            </ul>
+
+            <h2>5.5 Classification Measures</h2>
+            <div class="formula">Sensitivity = TP / (TP + FN)
+Specificity = TN / (TN + FP)
+Accuracy = (TP + TN) / Total
+Precision = TP / (TP + FP)
+F1 = 2 × (Precision × Recall) / (Precision + Recall)</div>
+        </div>
+
+        <!-- PAGE 9: QUICK REFERENCE -->
+        <div class="page">
+            <h1>6. Quick Reference Guide</h1>
+
+            <h2>When to Use Each Measure</h2>
+
+            <h3>Central Tendency:</h3>
+            <ul>
+                <li><strong>Mean:</strong> Normally distributed, outlier-free</li>
+                <li><strong>Median:</strong> Skewed or outliers present</li>
+                <li><strong>Mode:</strong> Categorical or most common value</li>
+            </ul>
+
+            <h3>Dispersion:</h3>
+            <ul>
+                <li><strong>Range:</strong> Quick overview</li>
+                <li><strong>SD:</strong> Normal data without outliers</li>
+                <li><strong>IQR:</strong> Skewed data or outliers</li>
+                <li><strong>CV:</strong> Comparing different scales</li>
+            </ul>
+
+            <h3>Shape:</h3>
+            <ul>
+                <li><strong>Skewness:</strong> Direction bias</li>
+                <li><strong>Kurtosis:</strong> Outlier risk, tail behavior</li>
+            </ul>
+
+            <h3>Position:</h3>
+            <ul>
+                <li><strong>Quartiles:</strong> Distribution overview</li>
+                <li><strong>Deciles:</strong> Rankings, income analysis</li>
+                <li><strong>Percentiles:</strong> Test scores, comparisons</li>
+                <li><strong>IQR:</strong> Outlier detection</li>
+            </ul>
+
+            <h2>Complete Data Analysis Workflow</h2>
+
+            <div class="visual-box">Step 1: DESCRIBE
+├─ Central Tendency (Mean, Median, Mode)
+└─ Dispersion (SD, Range)
+
+Step 2: UNDERSTAND
+├─ Shape (Skewness, Kurtosis)
+└─ Position (Quartiles, Percentiles)
+
+Step 3: COMPARE
+├─ Correlation (Pearson)
+└─ Effect Size (Cohen's d)
+
+Step 4: VALIDATE
+└─ Reliability & Performance
+
+Step 5: COMMUNICATE
+└─ Visualize & Report</div>
+
+            <h2>Key Formulas</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concept</th>
+                        <th>Formula</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mean</td>
+                        <td>Σx / n</td>
+                    </tr>
+                    <tr>
+                        <td>Variance</td>
+                        <td>Σ(x - mean)² / n</td>
+                    </tr>
+                    <tr>
+                        <td>Std Dev</td>
+                        <td>√Variance</td>
+                    </tr>
+                    <tr>
+                        <td>CV</td>
+                        <td>(SD / Mean) × 100%</td>
+                    </tr>
+                    <tr>
+                        <td>Z-Score</td>
+                        <td>(x - mean) / SD</td>
+                    </tr>
+                    <tr>
+                        <td>Percentile Pos</td>
+                        <td>(P / 100) × (n + 1)</td>
+                    </tr>
+                    <tr>
+                        <td>IQR</td>
+                        <td>Q3 - Q1</td>
+                    </tr>
+                    <tr>
+                        <td>Pearson r</td>
+                        <td>Σ[(x-x̄)(y-ȳ)]/√[Σ(x-x̄)²×Σ(y-ȳ)²]</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <footer>
+                <p><strong>Statistical Measures - Complete Comprehensive Guide</strong></p>
+                <p>Reference for data analysis and interpretation</p>
+                <p>© 2026</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin: [0, 0, 0, 0],
+                filename: 'Statistical_Measures_Complete_Guide.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).save().from(element);
+        }
+    </script>
+</body>
+</html>
